@@ -1,0 +1,24 @@
+{
+	"manifest_version": 2,
+	"name": "Metrication",
+	"version": "0.1",
+	"description": "Automatically convert quantities to standard units on the web",
+	"icons": {
+		"48": "icons/icon-48.png",
+		"96": "icons/icon-96.png"
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["out/content.js"]
+		}
+	],
+	"web_accessible_resources": [
+		"out/data.js"
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "metrication@felle.nz"
+		}
+	}
+}

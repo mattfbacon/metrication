@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"lib": ["DOM", "ES2021"],
+		"noImplicitAny": true,
+		"outDir": "out",
+		"strict": true,
+		"target": "ESNext",
+	}
+}
