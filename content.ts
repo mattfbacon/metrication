@@ -526,7 +526,7 @@ const METRICATION_MARKER = Symbol();
 type ElementWithMarker = Element & { [METRICATION_MARKER]?: boolean };
 
 // Never processed.
-const SPECIAL_ELEMENTS = ['BASE', 'HEAD', 'LINK', 'META', 'STYLE', 'TITLE', 'CANVAS', 'SCRIPT'];
+const SPECIAL_ELEMENTS = ['base', 'head', 'link', 'meta', 'style', 'title', 'canvas', 'script', 'pre', 'code'].map(x => x.toUpperCase());
 const reject_this = (node: Node) => node instanceof HTMLElement && (SPECIAL_ELEMENTS.includes(node.tagName) || node.isContentEditable || node.classList.contains("ace_editor"));
 const reject_including_ancestors = (node: Node) => reject_this(node) || (node instanceof HTMLElement && node.matches('[contenteditable] *, .ace_editor *' + SPECIAL_ELEMENTS.map(el => `, ${el.toLowerCase()} *`).join('')));
 
