@@ -527,20 +527,21 @@ type ElementWithMarker = Element & { [METRICATION_MARKER]?: boolean };
 
 // Never processed.
 const SPECIAL_ELEMENTS = ['BASE', 'HEAD', 'LINK', 'META', 'STYLE', 'TITLE', 'CANVAS', 'SCRIPT'];
+const reject_this = (node: Node) => node instanceof HTMLElement && (SPECIAL_ELEMENTS.includes(node.tagName) || node.isContentEditable || node.classList.contains("ace_editor"));
+const reject_including_ancestors = (node: Node) => reject_this(node) || (node instanceof HTMLElement && node.matches('[contenteditable] *, .ace_editor *' + SPECIAL_ELEMENTS.map(el => `, ${el.toLowerCase()} *`).join('')));
 
 (async () => {
 	const data_raw: Data<string> = eval(`"use strict";${await (await fetch(browser.runtime.getURL('out/data.js'))).text()};data`);
 	const processor = new Processor(data_raw);
 
-	const reject = (node: Node) => node instanceof HTMLElement && (SPECIAL_ELEMENTS.includes(node.tagName) || (node.isContentEditable && node.classList.contains("ace_editor")));
 	const process_node = (root: Node) => {
-		if (reject(root)) {
+		if (reject_including_ancestors(root)) {
 			return;
 		}
 
 		const iter = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
 			acceptNode(node) {
-				if (reject(node)) {
+				if (reject_this(node)) {
 					return NodeFilter.FILTER_REJECT;
 				} else if (node instanceof Text) {
 					return NodeFilter.FILTER_ACCEPT;
@@ -597,9 +598,7 @@ const SPECIAL_ELEMENTS = ['BASE', 'HEAD', 'LINK', 'META', 'STYLE', 'TITLE', 'CAN
 	const track = new MutationObserver((changes, _observer) => {
 		const targets = new Set(changes.map(record => record.target));
 		for (const target of targets) {
-			if (target instanceof HTMLElement && (SPECIAL_ELEMENTS.includes(target.tagName) || target.matches('[contenteditable] *, .ace_editor *' + SPECIAL_ELEMENTS.map(el => `, ${el.toLowerCase()} *`).join('')))) {
-				continue;
-			}
+			// `process_node` already checks `reject_including_ancestors`.
 			process_node(target);
 		}
 	});
