@@ -60,13 +60,13 @@ const data: Data<string> = {
 		},
 		{
 			"name": "foot",
-			"symbols": ["f(?:oo|ee)t", "ft", "['’]"],
+			"symbols": ["f(?:oo|ee)t", "ft", "['’′]"],
 			"dimension": "length",
 			"factor": 0.3048,
 		},
 		{
 			"name": "inch",
-			"symbols": ["inch(?:es)?", "in", "[\"”]", "’’", "\'\'", "zoll"],
+			"symbols": ["inch(?:es)?", "in", "[\"”″]", "’’", "\'\'", "zoll"],
 			"dimension": "length",
 			"factor": 0.0254,
 			"hide": [
