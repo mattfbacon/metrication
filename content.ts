@@ -373,7 +373,7 @@ class Processor {
 				const base_unit = this.data.canonical_units[from];
 				const inner = this.prepare(base_unit, power, base_input_value);
 				const power_name = POWERS.get(power)!!;
-				return { symbol: `${inner.symbol}^${power}`, name: `${power_name} ${inner.name}`, value: inner.value, factor: inner.factor * Math.pow(10, power), base_unit: inner.base_unit };
+				return { symbol: `${inner.symbol}^${power}`, name: `${power_name} ${inner.name}`, value: inner.value, factor: Math.pow(inner.factor, power), base_unit: inner.base_unit };
 		}
 	}
 
