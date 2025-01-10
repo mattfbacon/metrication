@@ -338,6 +338,8 @@ class Processor {
 								break;
 							}
 						}
+					} else if (base_value < 1000) {
+						// Already okay.
 					} else {
 						// Go bigger.
 						const scales_iter = gen_scales(unit.scales ?? {}, SI_STEP);
@@ -380,7 +382,8 @@ class Processor {
 			let opts = map_non_empty(units, unit => this.prepare_inner(unit, inner_power, base_input_value));
 
 			// Limit to only optimal options, if there are any.
-			const optimal_opts = opts.filter(opt => opt.value >= 1);
+			// We allow a leading zero here for cases like 1 acre = 4046 m^2 / 0.404 hectare.
+			const optimal_opts = opts.filter(opt => opt.value >= 0.1);
 			if (is_non_empty(optimal_opts)) {
 				opts = optimal_opts;
 			}
