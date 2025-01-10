@@ -131,6 +131,12 @@ const data: Data<string> = {
 			"factor": 1.609344,
 		},
 		{
+			"name": "square inch",
+			"symbols": ["sq(?:uare)? *inch(?:es)?", "sq\.? *in\.?"],
+			"dimension": "area",
+			"factor": 0.00064516,
+		},
+		{
 			"name": "cubic inch",
 			"symbols": ["cubic inch(?:es)?", "cu\.? *in\.?"],
 			"dimension": "volume",
