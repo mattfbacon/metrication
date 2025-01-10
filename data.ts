@@ -132,19 +132,19 @@ const data: Data<string> = {
 		},
 		{
 			"name": "cubic inch",
-			"symbols": ["cubic inch(?:es)?", "cu\.? *in"],
+			"symbols": ["cubic inch(?:es)?", "cu\.? *in\.?"],
 			"dimension": "volume",
 			"factor": 0.016387064,
 		},
 		{
 			"name": "square foot",
-			"symbols": ["sq(?:uare|\.) *f(?:oo|ee)t", "sq\.? *ft", "sf"],
+			"symbols": ["sq(?:uare|\.) *f(?:oo|ee)t", "sq\.? *ft\.?", "sf"],
 			"dimension": "area",
 			"factor": 0.09290304,
 		},
 		{
 			"name": "cubic foot",
-			"symbols": ["cu(?:bic|\.) *f(?:oo|ee)t", "cu\.? *ft"],
+			"symbols": ["cu(?:bic|\.) *f(?:oo|ee)t", "cu\.? *ft\.?"],
 			"dimension": "volume",
 			"factor": 28.316846592,
 		},
