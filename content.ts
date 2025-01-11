@@ -470,7 +470,7 @@ class Processor {
 					return { value: total_value, description };
 				});
 
-				const value_for_unit_calculation = geo_mean(converted_values.map(x => x.value));
+				const value_for_unit_calculation = geo_mean(converted_values.map(x => Math.abs(x.value)));
 				const output_info = this.prepare(canonical_unit, 1, value_for_unit_calculation);
 				const output_factor = output_info.factor;
 				const suffix = `${output_info.base_unit.symbol_space ?? true ? ' ' : ''}${output_info.symbol}`;
