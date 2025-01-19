@@ -554,7 +554,15 @@ const reject_including_ancestors = (node: Node) => reject_this(node) || (node in
 			}
 		});
 		let node;
+		// We need to delay the replacement in order to not confuse the tree walker.
+		// By delaying by one step, we make sure to only manipulate DOM elements before the current position.
+		let last_to_replace = null;
 		while ((node = iter.nextNode()) != null) {
+			if (last_to_replace !== null) {
+				last_to_replace.node.replaceWith(...last_to_replace.output);
+				last_to_replace = null;
+			}
+
 			assert(node instanceof CharacterData);
 			if ((node.parentElement as ElementWithMarker | undefined)?.[METRICATION_MARKER]) {
 				continue;
@@ -579,7 +587,11 @@ const reject_including_ancestors = (node: Node) => reject_this(node) || (node in
 					return el;
 				}
 			});
-			node.replaceWith(...html_output);
+			last_to_replace = { node, output: html_output };
+		}
+
+		if (last_to_replace !== null) {
+			last_to_replace.node.replaceWith(...last_to_replace.output);
 		}
 	};
 
