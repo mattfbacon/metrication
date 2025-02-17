@@ -1,4 +1,16 @@
+<html lang="en-US">
+<head>
+<style>
+html { margin: 0.5rem; }
+body { width: 100%; margin: auto; max-width: 80rem; display: flex; flex-direction: row; justify-content: stretch; }
+body > div { flex: 1; }
+</style>
+</head>
 <body>
+<!-- `class="ace_editor"` is a hack to avoid this being processed. -->
+<div>
+	<h1>Original</h1>
+<div id="original" class="ace_editor">
 <p style="white-space:pre">5 miles
 10 pounds
 3 tons
@@ -31,6 +43,308 @@ after 13,000 miles
 12 sq.in.
 12 sqft
 -10 cup
+1/2 quart
+1000.5 feet (period)
+1.000,5 feet (comma)
+<span lang="en-US">1.000 feet (ambiguous, fallback to english)</span>
+<span lang="de-DE">1.000 feet (ambiguous, fallback to german)</span>
+1 000.5 feet (space period)
+1 000,5 feet (space comma)
+½ feet
+1½ feet
 </p>
 <script type="application/json">{"a":"3.0"}</script>
+</div>
+</div>
+<div>
+	<h1>Actual</h1>
+<div id="test">
+<p style="white-space:pre">5 miles
+10 pounds
+3 tons
+2 acres
+1 foot
+10 inches
+3 yards
+5 °F
+10 gal
+3 cup
+1000 hp
+10 lbft
+100 mph
+1.23456 inches
+10,000 lb
+10 acres
+2000 acres
+20000 acres
+200000 acres
+2000000 acres
+4'3"
+2.2 cu. ft
+100 fur
+100 für
+297.4 in
+1-1/4 cup
+1 1/4 cup
+after 13,000 miles
+5′ 11″
+12 sq.in.
+12 sqft
+-10 cup
+1/2 quart
+1000.5 feet (period)
+1.000,5 feet (comma)
+<span lang="en-US">1.000 feet (ambiguous, fallback to english)</span>
+<span lang="de-DE">1.000 feet (ambiguous, fallback to german)</span>
+1 000.5 feet (space period)
+1 000,5 feet (space comma)
+½ feet
+1½ feet
+</p>
+<script type="application/json">{"a":"3.0"}</script>
+</div>
+</div>
+<div>
+	<h1>Expected</h1>
+<!-- `class="ace_editor"` is a hack to avoid this being processed. -->
+<div id="snapshot" class="ace_editor">
+<p style="white-space:pre"><abbr title="Original: 5 miles
+Detected units: mile
+Converted to: metre * 10^3
+">8.047 km</abbr>
+<abbr title="Original: 10 pounds
+Detected units: pound
+Converted to: gram * 10^3
+">4.536 kg</abbr>
+<abbr title="Original: 3 tons
+Detected units: ton
+Converted to: tonne
+
+There was ambiguity in the conversion: the value could be interpreted as:
+- 3 as short ton = 2.722 tonnes
+- 3 as long ton = 3.048 tonnes
+- 3 as metric ton = 3 tonnes
+">2.722/3.048/3 tonnes</abbr>
+<abbr title="Original: 2 acres
+Detected units: acre
+Converted to: hectare
+">0.809 ha</abbr>
+<abbr title="Original: 1 foot
+Detected units: foot
+Converted to: metre * 10^-2
+">30.48 cm</abbr>
+<abbr title="Original: 10 inches
+Detected units: inch
+Converted to: metre * 10^-2
+">25.4 cm</abbr>
+<abbr title="Original: 3 yards
+Detected units: yard
+Converted to: metre
+">2.743 m</abbr>
+<abbr title="Original: 5 °F
+Detected units: fahrenheit
+Converted to: celsius
+
+There was ambiguity in the conversion: the value could be interpreted as:
+- 5 as Absolute = -15°C
+- 5 as Relative = 2.778°C
+">-15/2.778°C</abbr>
+<abbr title="Original: 10 gal
+Detected units: gallon
+Converted to: litre
+
+There was ambiguity in the conversion: the value could be interpreted as:
+- 10 as US gallon = 37.854 L
+- 10 as Imperial gallon = 45.461 L
+">37.854/45.461 L</abbr>
+<abbr title="Original: 3 cup
+Detected units: cup
+Converted to: litre * 10^-3
+">709.765 mL</abbr>
+<abbr title="Original: 1000 hp
+Detected units: horsepower
+Converted to: watt * 10^3
+">745.7 kW</abbr>
+<abbr title="Original: 10 lbft
+Detected units: poundfoot
+Converted to: newton-metre
+">13.558 Nm</abbr>
+<abbr title="Original: 100 mph
+Detected units: miles per hour
+Converted to: kilometres per hour
+">160.934 km/h</abbr>
+<abbr title="Original: 1.23456 inches
+Detected units: inch
+Converted to: metre * 10^-2
+">3.135 782 4 cm</abbr>
+<abbr title="Original: 10,000 lb
+Detected units: pound
+Converted to: tonne
+">4.536 tonnes</abbr>
+<abbr title="Original: 10 acres
+Detected units: acre
+Converted to: hectare
+">4.047 ha</abbr>
+<abbr title="Original: 2000 acres
+Detected units: acre
+Converted to: square metre * 10^3
+">8.094 km^2</abbr>
+<abbr title="Original: 20000 acres
+Detected units: acre
+Converted to: square metre * 10^3
+">80.937 km^2</abbr>
+<abbr title="Original: 200000 acres
+Detected units: acre
+Converted to: square metre * 10^3
+">809.371 km^2</abbr>
+<abbr title="Original: 2000000 acres
+Detected units: acre
+Converted to: square metre * 10^3
+">8 093.713 km^2</abbr>
+<abbr title="Original: 4'3&quot;
+Detected unit: foot, inch
+Converted to: metre
+">1.295 m</abbr>
+<abbr title="Original: 2.2 cu. ft
+Detected units: cubic foot
+Converted to: litre
+">62.297 1 L</abbr>
+100 fur
+100 für
+<abbr title="Original: 297.4 in
+Detected units: inch
+Converted to: metre
+">7.554 m</abbr>
+<abbr title="Original: 1-1/4 cup
+Detected units: cup
+Converted to: litre * 10^-3
+">295.735 3 mL</abbr>
+<abbr title="Original: 1 1/4 cup
+Detected units: cup
+Converted to: litre * 10^-3
+">295.735 3 mL</abbr>
+after <abbr title="Original: 13,000 miles
+Detected units: mile
+Converted to: metre * 10^3
+">20 921.472 km</abbr>
+<abbr title="Original: 5′ 11″
+Detected unit: foot, inch
+Converted to: metre
+">1.803 m</abbr>
+<abbr title="Original: 12 sq.in.
+Detected units: square inch
+Converted to: square metre * 10^-2
+">77.419 cm^2</abbr>
+<abbr title="Original: 12 sqft
+Detected units: square foot
+Converted to: square metre
+">1.115 m^2</abbr>
+<abbr title="Original: -10 cup
+Detected units: cup
+Converted to: litre
+">-2.366 L</abbr>
+<abbr title="Original: 1/2 quart
+Detected units: quart
+Converted to: litre * 10^-3
+">473.176 5 mL</abbr>
+<abbr title="Original: 1000.5 feet
+Detected units: foot
+Converted to: metre
+">304.952 4 m</abbr> (period)
+<abbr title="Original: 1.000,5 feet
+Detected units: foot
+Converted to: metre
+">304.952 4 m</abbr> (comma)
+<span lang="en-US"><abbr title="Original: 1.000 feet
+Detected units: foot
+Converted to: metre * 10^-2
+">30.48 cm</abbr> (ambiguous, fallback to english)</span>
+<span lang="de-DE"><abbr title="Original: 1.000 feet
+Detected units: foot
+Converted to: metre
+">304.8 m</abbr> (ambiguous, fallback to german)</span>
+<abbr title="Original: 1 000.5 feet
+Detected units: foot
+Converted to: metre
+">304.952 4 m</abbr> (space period)
+<abbr title="Original: 1 000,5 feet
+Detected units: foot
+Converted to: metre
+">304.952 4 m</abbr> (space comma)
+<abbr title="Original: ½ feet
+Detected units: foot
+Converted to: metre * 10^-2
+">15.24 cm</abbr>
+<abbr title="Original: 1½ feet
+Detected units: foot
+Converted to: metre * 10^-2
+">45.72 cm</abbr>
+</p>
+<script type="application/json">{"a":"3.0"}</script>
+</div>
+</div>
+<script>
+	const ATTRS = ['lang', 'title', 'type', 'style'];
+	// (a: Element, b: Element): [string, ...any] | null;
+	function dom_equals_shallow(a, b) {
+		if (a.nodeName !== b.nodeName) {
+			return ['name'];
+		}
+		for (const attr of ATTRS) {
+			if (a.getAttribute(attr) !== b.getAttribute(attr)) {
+				return [`attr ${attr}`];
+			}
+		}
+		if (a.childNodes.length !== b.childNodes.length) {
+			return [`num nodes ${a.childNodes.length} vs ${b.childNodes.length}`];
+		}
+		for (let i = 0; i < a.childNodes.length; ++i) {
+			const a_child = a.childNodes[i];
+			const b_child = b.childNodes[i];
+			if ((a_child instanceof Element) !== (b_child instanceof Element)) {
+				return [`is-element difference ${i}`, a_child, b_child];
+			}
+			if (a_child instanceof Element) {
+				continue;
+			}
+			if (a_child.data !== b_child.data) {
+				return [`non-element-child ${i} data differs`, a_child, b_child];
+			}
+		}
+		return null;
+	}
+	// (a: Element, b: Element): [Element, Element, [string, ...any]] | null;
+	function dom_diff(a, b) {
+		const reason = dom_equals_shallow(a, b);
+		if (reason !== null) {
+			return [a, b, reason];
+		}
+		for (let i = 0; i < a.childNodes.length; ++i) {
+			const a_child = a.childNodes[i];
+			const b_child = b.childNodes[i];
+			if (!(a_child instanceof Element)) {
+				continue;
+			}
+			const child_result = dom_diff(a_child, b_child);
+			if (child_result !== null) {
+				return child_result;
+			}
+		}
+		return null;
+	}
+setTimeout(() => {
+	const actual = document.getElementById('test');
+	const expected = document.getElementById('snapshot');
+	const diff = dom_diff(actual, expected);
+	if (diff === null) {
+		alert('passed!');
+	} else {
+		alert(`failed: ${diff[2][0]}`);
+		console.error("failed", diff[0], diff[1], ...diff[2]);
+		diff[0].style.border = '1px solid red';
+		diff[1].style.border = '1px solid green';
+	}
+}, 500);
+</script>
 </body>
+</html>

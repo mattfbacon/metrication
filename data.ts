@@ -1,4 +1,4 @@
-export type NonEmpty<T> = [T, ...T[]];
+import type { NonEmpty } from './util';
 
 export type Scales = { extra?: number[], min?: number, max?: number };
 export type NonderivedCanonicalUnit = ({ name: string, symbol: string, symbol_space?: boolean, factor?: number } & ({ type: 'si', scales?: Scales, powers?: string[] } | { type: 'single' }));
@@ -9,7 +9,7 @@ export type Factor = number | { mul: number, add?: number, recip?: boolean };
 export type ConvertedUnit<SymbolType = RegExp> = { name: string, symbols: NonEmpty<SymbolType>, dimension: Dimension, factor: Factor | NonEmpty<[Factor, string]>, hide?: SymbolType[] };
 export type Data<SymbolType = RegExp> = { canonical_units: { [K in Dimension]: CanonicalUnit | NonEmpty<CanonicalUnit> }, converted_units: ConvertedUnit<SymbolType>[] };
 
-const data: Data<string> = {
+export const data: Data<string> = {
 	"canonical_units": {
 		"length": { "type": "si", "name": "metre", "symbol": "m", "scales": { "extra": [-2], "max": 3 }, "powers": ["area", "volume"] },
 		"mass": [
@@ -107,6 +107,18 @@ const data: Data<string> = {
 			],
 		},
 		{
+			"name": "pint",
+			"symbols": ["pints?", "pts?"],
+			"dimension": "volume",
+			"factor": 0.473176473,
+		},
+		{
+			"name": "quart",
+			"symbols": ["quarts?", "qts?"],
+			"dimension": "volume",
+			"factor": 0.946352946,
+		},
+		{
 			"name": "horsepower",
 			"symbols": ["(?:brake ?)?horsepower", "b?hp", "horses" /* sigh */],
 			"dimension": "power",
@@ -132,25 +144,25 @@ const data: Data<string> = {
 		},
 		{
 			"name": "square inch",
-			"symbols": ["sq(?:uare)? *inch(?:es)?", "sq\.? *in\.?"],
+			"symbols": ["sq(?:uare)?[ -]*inch(?:es)?", "sq\.? *in\.?"],
 			"dimension": "area",
 			"factor": 0.00064516,
 		},
 		{
 			"name": "cubic inch",
-			"symbols": ["cubic inch(?:es)?", "cu\.? *in\.?"],
+			"symbols": ["cubic[ -]*inch(?:es)?", "cu\.? *in\.?"],
 			"dimension": "volume",
 			"factor": 0.016387064,
 		},
 		{
 			"name": "square foot",
-			"symbols": ["sq(?:uare|\.) *f(?:oo|ee)t", "sq\.? *ft\.?", "sf"],
+			"symbols": ["sq(?:uare|\.)[ -]*f(?:oo|ee)t", "sq\.?[ -]*ft\.?", "sf"],
 			"dimension": "area",
 			"factor": 0.09290304,
 		},
 		{
 			"name": "cubic foot",
-			"symbols": ["cu(?:bic|\.) *f(?:oo|ee)t", "cu\.? *ft\.?"],
+			"symbols": ["cu(?:bic|\.)[ -]*f(?:oo|ee)t", "cu\.?[ -]*ft\.?"],
 			"dimension": "volume",
 			"factor": 28.316846592,
 		},

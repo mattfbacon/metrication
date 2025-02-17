@@ -10,11 +10,8 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["out/content.js"]
+			"js": ["dist/content.js"]
 		}
-	],
-	"web_accessible_resources": [
-		"out/data.js"
 	],
 	"browser_specific_settings": {
 		"gecko": {
