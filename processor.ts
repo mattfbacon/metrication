@@ -342,11 +342,13 @@ function process(text: string, lang: () => string): (string | FormattedUnit)[] |
 
 			const final_values = converted_values.map(base_value => {
 				const output_value = base_value.value / output_factor;
-				const formatted_value = output_value.toFixed(output_precision).replace(/0+$/, '');
-				let [int, fract] = formatted_value.split('.');
-				int = util.str_rchunks(int, 3).join(DIGIT_SEPARATOR);
-				fract = util.str_chunks(fract, 3).join(DIGIT_SEPARATOR);
-				const formatted = `${int}.${fract}`.replace(/\.$/, '');
+				let formatted = output_value.toFixed(output_precision).replace(/0+$/, '');
+				if (isFinite(output_value)) {
+					let [int, fract] = formatted.split('.');
+					int = util.str_rchunks(int, 3).join(DIGIT_SEPARATOR);
+					fract = util.str_chunks(fract, 3).join(DIGIT_SEPARATOR);
+					formatted = `${int}.${fract}`.replace(/\.$/, '');
+				}
 				return { ...base_value, formatted };
 			})
 			const formatted_value = final_values.map(v => v.formatted).join('/') + suffix;
