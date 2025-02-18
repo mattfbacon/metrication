@@ -260,15 +260,22 @@ function normalise_number_format(raw_amount: string, lang: () => string): string
 	}
 }
 
+const FINAL_NUMBER_REGEX = /^[-+]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)$/;
 function parse_amount_(raw_amount: string, lang: () => string): { value: number, precision: number } {
 	const amount = normalise_number_format(raw_amount, lang);
+	const error = `could not parse \`${amount}\` (raw \`${raw_amount}\`)`;
+	if (!FINAL_NUMBER_REGEX.test(amount)) {
+		throw new Error(error);
+	}
+
+	const value = parseFloat(amount);
+	if (isNaN(value)) {
+		throw new Error(error);
+	}
 
 	const dot_pos = amount.lastIndexOf('.');
 	const precision = dot_pos == -1 ? 0 : amount.length - dot_pos - 1;
-	const value = parseFloat(amount);
-	if (isNaN(value)) {
-		throw new Error(`could not parse \`${amount}\` (raw \`${raw_amount}\`)`);
-	}
+
 	return { value, precision };
 }
 
