@@ -46,24 +46,21 @@ type FormattedUnit = { replacement: string, info: string };
 
 const FRACTIONS = new Map([...'¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟↉'].map(x => [x, x.normalize('NFKC').replace('⁄', '/')]));
 
-const units = Object.values(data_raw.converted_units).flatMap(unit => unit.symbols);
+const UNITS = Object.values(data_raw.converted_units).flatMap(unit => unit.symbols);
 // XXX Could be optimised by somehow saving these values.
-units.sort((a, b) => util.regex_min_match_length(b) - util.regex_min_match_length(a));
+UNITS.sort((a, b) => util.regex_min_match_length(b) - util.regex_min_match_length(a));
 
-const units_regex = units.map(x => `(?:${x})`).join('|');
+const units_regex = UNITS.map(x => `(?:${x})`).join('|');
 const fracs = util.iter_join(FRACTIONS.keys(), '');
 
 const single = `((?:[+.-]*[\\d${fracs}]+(?:[\\d${fracs}.,\\-\\p{Zs}][\\d${fracs}]+)*)(?:\\p{Zs}*\\/\\p{Zs}*\\d+(?:[\\d.,\\p{Zs}]\\d+)*)?)\\p{Zs}*(?:\\+\\p{Zs}*)?(?:-\\p{Zs}*)?(${units_regex})`;
-// .
-const single_regex = new RegExp(single, 'igum');
+const SINGLE_REGEX = new RegExp(single, 'igum');
 
 const W = "[^\\p{L}\\p{M}\\p{Nd}\\p{Nl}\\p{Pc}]";
 const repeated = `(?:(?<=${W})|^)${single}(?:\\p{Zs}*${single}+)*(?:(?=${W})|$)`;
-// .
-const repeated_regex = new RegExp(repeated, 'igum');
+const REPEATED_REGEX = new RegExp(repeated, 'igum');
 
-// .
-const data = {
+const DATA = {
 	...data_raw,
 	converted_units: data_raw.converted_units.map(unit => ({
 		...unit,
@@ -155,14 +152,14 @@ function prepare_inner(unit: CanonicalUnit, inner_power: number, base_input_valu
 			return { symbol: unit.symbol, name: unit.name, value: base_value, factor: base_factor, base_unit: unit };
 		case 'derived':
 			const { from, power } = unit;
-			const base_unit = data.canonical_units[from];
+			const base_unit = DATA.canonical_units[from];
 			const inner = prepare(base_unit, power, base_input_value);
 			const power_name = POWERS.get(power)!!;
 			return { symbol: `${inner.symbol}^${power}`, name: `${power_name} ${inner.name}`, value: inner.value, factor: Math.pow(inner.factor, power), base_unit: inner.base_unit };
 	}
 }
 
-function prepare(units: typeof data.canonical_units[keyof typeof data.canonical_units], inner_power: number, base_input_value: number): { symbol: string, name: string, value: number, factor: number, base_unit: NonderivedCanonicalUnit } {
+function prepare(units: typeof DATA.canonical_units[keyof typeof DATA.canonical_units], inner_power: number, base_input_value: number): { symbol: string, name: string, value: number, factor: number, base_unit: NonderivedCanonicalUnit } {
 	if (Array.isArray(units)) {
 		let opts = util.map_non_empty(units, unit => prepare_inner(unit, inner_power, base_input_value));
 
@@ -276,7 +273,7 @@ function parse_amount_(raw_amount: string, lang: () => string): { value: number,
 }
 
 function parse_unit(raw_unit: string): ConvertedUnit | null {
-	return data.converted_units.find(unit => Object.values(unit.symbols).some(symbol => util.regex_matches_all(symbol, raw_unit))) ?? null;
+	return DATA.converted_units.find(unit => Object.values(unit.symbols).some(symbol => util.regex_matches_all(symbol, raw_unit))) ?? null;
 }
 
 function process(text: string, lang: () => string): (string | FormattedUnit)[] | null {
@@ -284,10 +281,10 @@ function process(text: string, lang: () => string): (string | FormattedUnit)[] |
 	let last_index = 0;
 	lang = util.memo(lang);
 
-	for (const repeated_match of text.matchAll(repeated_regex)) {
+	for (const repeated_match of text.matchAll(REPEATED_REGEX)) {
 		// console.log(repeated_match);
 		const repeated_text = repeated_match[0];
-		const single_matches = [...repeated_text.matchAll(single_regex)];
+		const single_matches = [...repeated_text.matchAll(SINGLE_REGEX)];
 
 		const parsed: { span: { start: number, end: number }, amount: { value: number, precision: number, raw: string }, unit: ConvertedUnit<RegExp> }[] = single_matches.flatMap(single_match => {
 			const [_, raw_amount, raw_unit] = single_match;
@@ -314,7 +311,7 @@ function process(text: string, lang: () => string): (string | FormattedUnit)[] |
 		const processed = grouped.map(group => {
 			const whole_span = { start: group[0].span.start, end: group[group.length - 1].span.end };
 			const original_unit = group[0].unit;
-			const canonical_unit = data.canonical_units[original_unit.dimension];
+			const canonical_unit = DATA.canonical_units[original_unit.dimension];
 			const output_precision = group.map(measurement => measurement.amount.precision).reduce((a, b) => Math.max(a, b)) + 3;
 			const units = [...new Set(group.map(measurement => measurement.unit))];
 
