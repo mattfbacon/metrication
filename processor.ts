@@ -293,12 +293,15 @@ function process(text: string, lang: () => string): (string | FormattedUnit)[] |
 		const repeated_text = repeated_match[0];
 		const single_matches = [...repeated_text.matchAll(SINGLE_REGEX)];
 
-		const parsed: { span: { start: number, end: number }, amount: { value: number, precision: number, raw: string }, unit: ConvertedUnit<RegExp> }[] = single_matches.flatMap(single_match => {
+		let parsed: { span: { start: number, end: number }, amount: { value: number, precision: number, raw: string }, unit: ConvertedUnit<RegExp> }[] = single_matches.flatMap(single_match => {
 			const [_, raw_amount, raw_unit] = single_match;
 
-			const amount = parse_amount(raw_amount, lang);
-			if (amount === null) {
-				console.warn('failed to parse amount', amount);
+			let amount;
+			try {
+				amount = parse_amount(raw_amount, lang);
+				util.assert(!isNaN(amount.value), 'amount cannot be NaN');
+			} catch (e) {
+				console.warn('failed to parse amount', amount, e);
 				return [];
 			}
 
@@ -312,7 +315,6 @@ function process(text: string, lang: () => string): (string | FormattedUnit)[] |
 			const end = start + single_match[0].length;
 			return [{ span: { start, end }, amount: { ...amount, raw: raw_amount }, unit }];
 		});
-		util.assert(parsed.every(x => !isNaN(x.amount.value)));
 		// Group measurements of the same dimension, e.g., "4 feet 3 inches".
 		const grouped = util.arr_group_by(parsed, x => x.unit.dimension);
 		const processed = grouped.map(group => {

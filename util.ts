@@ -99,10 +99,10 @@ export function* arr_product<T>(arr: T[][]): Generator<T[], void> {
 	}
 }
 
-export function assert(cond: boolean): asserts cond {
+export function assert(cond: boolean, message?: string): asserts cond {
 	if (!cond) {
-		alert("Metrication: assertion failed. see console for more info");
-		throw new Error("assertion failed!");
+		alert(`Metrication: assertion failed${message && ': ' + message}. see console for more info`);
+		throw new Error(`assertion${message && ` "${message}"`} failed!`);
 	}
 };
 
