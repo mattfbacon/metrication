@@ -6,8 +6,9 @@ Tries its best to not be annoying but due to natural language ambiguity there ar
 ## Usage
 
 ```shell
+# ensure you have parcel available, e.g., `npm -g install parcel`.
 ./build.sh
-zip -r /tmp/package.zip manifest.json icons out
+zip -r /tmp/package.zip manifest.json icons dist
 # Load /tmp/package.zip as an addon
 ```
 
